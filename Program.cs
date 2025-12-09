@@ -1,61 +1,49 @@
 ﻿Console.WriteLine("This application calculates the surface area of different geometric shapes.");
-Console.WriteLine();
 
-int option = default;
+bool isTrue = true;
 
-ShowMenu();
-
-ChooseShape();
-
-switch (option)
+while (isTrue)
 {
-    case 1:
-        Console.WriteLine($"Triangle area = {CalculateTriangleArea()}");
-        break;
-    case 2:
-        Console.WriteLine($"Rectangle area = {CalculateRectangleArea()}");
-        break;
-    case 3:
-        Console.WriteLine($"Square area = {CalculateSquareArea()}");
-        break;
-    case 4:
-        Console.WriteLine($"Circle area = {CalculateCircleArea()}");
-        break;
-    default:
-        Console.WriteLine("We only have 4 shapes");
-        break;
-}
-
-static void ShowMenu()
-{
+    Console.WriteLine();
     Console.WriteLine("1. Triangle");
     Console.WriteLine("2. Rectangle");
     Console.WriteLine("3. Square");
     Console.WriteLine("4. Circle");
-}
 
-void ChooseShape()
-{
-    Console.Write("Select shape number: ");
+    Console.Write("\nSelect shape number: ");
+    int option = int.Parse(Console.ReadLine());
 
-    int number = int.Parse(Console.ReadLine());
-
-    if (1 > number || number > 4)
+    if (0 < option && option < 5)
     {
-        Console.WriteLine("Enter number between 1 and 4");
+        isTrue = false;
+
+        switch (option)
+        {
+            case 1:
+                CalculateTriangleArea();
+                break;
+            case 2:
+                Console.WriteLine($"\nRectangle area = {CalculateRectangleArea()}");
+                break;
+            case 3:
+                Console.WriteLine($"\nSquare area = {CalculateSquareArea()}");
+                break;
+            case 4:
+                Console.WriteLine($"\nCircle area = {CalculateCircleArea()}");
+                break;
+        }
+
     }
     else
     {
-        option = number;
+        Console.WriteLine("Enter number between 1 and 4");
     }
 }
 
-double CalculateTriangleArea()
+void CalculateTriangleArea()
 {
-    double areaTriangle = 0;
-
-    Console.WriteLine("\nThe formula Area = base * height / 2, where you multiply the base by the perpendicular height and then divide by two");
-    Console.WriteLine("Enter the sides and height of the triangle.");
+    Console.WriteLine("\nTo find triangle area, we use Heron's formula: Area = Math.Sqrt(p(p−a)(p−b)(p−c)), where p = (a + b + c) / 2");
+    Console.WriteLine("Enter the sides of the triangle.");
 
     Console.Write("a = ");
     double a = Convert.ToDouble(Console.ReadLine());
@@ -63,19 +51,19 @@ double CalculateTriangleArea()
     double b = Convert.ToDouble(Console.ReadLine());
     Console.Write("c = ");
     double c = Convert.ToDouble(Console.ReadLine());
-    Console.Write("h = ");
-    double h = Convert.ToDouble(Console.ReadLine());
 
-    if (a + b < c || a + c < b || b + c < a)
+    double p = (a + b + c) / 2;
+
+    if (a + b <= c || a + c <= b || b + c <= a)
     {
         Console.WriteLine("There is no such triangle");
+        isTrue = true;
     }
     else
     {
-        areaTriangle = a * h / 2;
+        double areaTriangle = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+        Console.WriteLine($"\nTriangle area = {areaTriangle}");
     }
-
-    return areaTriangle;
 }
 
 int CalculateRectangleArea()
@@ -83,25 +71,21 @@ int CalculateRectangleArea()
     Console.WriteLine("\nTo find a rectangle's area, multiply its length by its width: Area = Length * Width");
     Console.WriteLine("Enter length and width of the rectangle.");
 
-    Console.Write("length = ");
+    Console.Write("Length = ");
     int length = Convert.ToInt32(Console.ReadLine());
-    Console.Write("width = ");
+    Console.Write("Width = ");
     int width = Convert.ToInt32(Console.ReadLine());
 
-    int areaRectangle = length * width;
-
-    return areaRectangle;
+    return length * width;
 }
 
-int CalculateSquareArea()
+double CalculateSquareArea()
 {
-    Console.WriteLine("\nTo count the area of a square, simply multiply the length of one side by itself: Area = side * side");
+    Console.WriteLine("\nTo count the area of a square, use the formula A = side * side");
     Console.Write("Enter side of the square: ");
     int side = Convert.ToInt32(Console.ReadLine());
 
-    int areaSquare = side * side;
-
-    return areaSquare;
+    return Math.Pow(side, 2);
 }
 
 double CalculateCircleArea()
@@ -110,7 +94,5 @@ double CalculateCircleArea()
     Console.Write("Enter radius of the circle: ");
     double r = Convert.ToInt32(Console.ReadLine());
 
-    double areaCircle = Math.PI * Math.Pow(r, 2);
-
-    return areaCircle;
+    return Math.PI * Math.Pow(r, 2);
 }
