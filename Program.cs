@@ -1,8 +1,8 @@
 ﻿Console.WriteLine("This application calculates the surface area of different geometric shapes.");
 
-bool isTrue = true;
+bool isRepeat = default;
 
-while (isTrue)
+do
 {
     Console.WriteLine();
     Console.WriteLine("1. Triangle");
@@ -15,8 +15,6 @@ while (isTrue)
 
     if (0 < option && option < 5)
     {
-        isTrue = false;
-
         switch (option)
         {
             case 1:
@@ -24,25 +22,29 @@ while (isTrue)
                 break;
             case 2:
                 Console.WriteLine($"\nRectangle area = {CalculateRectangleArea()}");
+                AskToContinue();
                 break;
             case 3:
                 Console.WriteLine($"\nSquare area = {CalculateSquareArea()}");
+                AskToContinue();
                 break;
             case 4:
                 Console.WriteLine($"\nCircle area = {CalculateCircleArea()}");
+                AskToContinue();
                 break;
         }
-
     }
     else
     {
+        isRepeat = true;
         Console.WriteLine("Enter number between 1 and 4");
     }
-}
+} while (isRepeat);
 
 void CalculateTriangleArea()
 {
     Console.WriteLine("\nTo find triangle area, we use Heron's formula: Area = Math.Sqrt(p(p−a)(p−b)(p−c)), where p = (a + b + c) / 2");
+    Console.WriteLine("First, let's check whether a triangle with such sides exists.");
     Console.WriteLine("Enter the sides of the triangle.");
 
     Console.Write("a = ");
@@ -56,14 +58,16 @@ void CalculateTriangleArea()
 
     if (a + b <= c || a + c <= b || b + c <= a)
     {
-        Console.WriteLine("There is no such triangle");
-        isTrue = true;
+        Console.WriteLine("There is no such triangle. The sum of the lengths of any two sides must be greater than the length of the third side.");
+
     }
     else
     {
         double areaTriangle = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
         Console.WriteLine($"\nTriangle area = {areaTriangle}");
     }
+    
+    AskToContinue();
 }
 
 int CalculateRectangleArea()
@@ -95,4 +99,22 @@ double CalculateCircleArea()
     double r = Convert.ToInt32(Console.ReadLine());
 
     return Math.PI * Math.Pow(r, 2);
+}
+
+void AskToContinue()
+{
+    Console.Write("\nDo you want to continue(Yes/No, y/n): ");
+
+    string answer = Console.ReadLine();
+
+    if (answer == "Yes" || answer == "yes" || answer == "Y" || answer == "y")
+    {
+        isRepeat = true;
+    }
+    else
+    {
+        isRepeat = false;
+    }
+
+    Console.Clear();
 }
