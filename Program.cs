@@ -1,6 +1,6 @@
 ﻿Console.WriteLine("This application calculates the surface area of different geometric shapes.");
 
-bool isRepeat = default;
+bool isRepeat = false;
 
 do
 {
