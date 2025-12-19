@@ -5,6 +5,11 @@
 
 This console application calculates the **surface area of different geometric shapes** using standard mathematical formulas. The program provides a user-friendly, menu-driven interface with colored console output for better readability.
 
+## 🎬 Demo
+
+![Console App Demo](assets/GeometryGuru.gif)
+
+
 ## 🚀 Features
 
 The application can calculate the area of the following shapes:
