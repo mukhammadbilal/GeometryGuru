@@ -1,51 +1,79 @@
-﻿Console.WriteLine("This application calculates the surface area of different geometric shapes.");
-
-bool isRepeat = false;
+﻿
+Console.ForegroundColor = ConsoleColor.Cyan;
+Console.WriteLine("--------------------------------------------------------------------------");
+Console.WriteLine("This application calculates the surface area of different geometric shapes");
+Console.WriteLine("--------------------------------------------------------------------------");
+Console.ResetColor();
 
 do
 {
+    ShowMenu();
+
+    int option = SelectMenuOption(0, 5);
+
+    switch (option)
+    {
+        case 1:
+            HandleTriangle();
+            break;
+        case 2:
+            HandRectangle();
+            break;
+        case 3:
+            HandleSquare();
+            break;
+        case 4:
+            HandleCircle();
+            break;
+    }
+} while (AskToContinue());
+
+void ShowMenu()
+{
     Console.WriteLine();
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("Main Menu");
     Console.WriteLine("1. Triangle");
     Console.WriteLine("2. Rectangle");
     Console.WriteLine("3. Square");
     Console.WriteLine("4. Circle");
+    Console.ResetColor();
+}
 
-    Console.Write("\nSelect shape number: ");
-    int option = int.Parse(Console.ReadLine());
-
-    if (0 < option && option < 5)
-    {
-        switch (option)
-        {
-            case 1:
-                CalculateTriangleArea();
-                break;
-            case 2:
-                Console.WriteLine($"\nRectangle area = {CalculateRectangleArea()}");
-                AskToContinue();
-                break;
-            case 3:
-                Console.WriteLine($"\nSquare area = {CalculateSquareArea()}");
-                AskToContinue();
-                break;
-            case 4:
-                Console.WriteLine($"\nCircle area = {CalculateCircleArea()}");
-                AskToContinue();
-                break;
-        }
-    }
-    else
-    {
-        isRepeat = true;
-        Console.WriteLine("Enter number between 1 and 4");
-    }
-} while (isRepeat);
-
-void CalculateTriangleArea()
+int SelectMenuOption(int min, int max)
 {
-    Console.WriteLine("\nTo find triangle area, we use Heron's formula: Area = Math.Sqrt(p(p−a)(p−b)(p−c)), where p = (a + b + c) / 2");
-    Console.WriteLine("First, let's check whether a triangle with such sides exists.");
-    Console.WriteLine("Enter the sides of the triangle.");
+    Console.Write("\nSelect shape number: ");
+
+    while (true)
+    {
+        if (int.TryParse(Console.ReadLine(), out int option) &&
+            min < option && option < max)
+        {
+            return option;
+        }
+
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write("Enter number between 1 and 4: ");
+        Console.ResetColor();
+    }
+}
+
+bool AskToContinue()
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.Write("\nDo you want to continue(y/n): ");
+
+    string answer = Console.ReadLine().ToLower();
+    Console.ResetColor();
+
+    return answer == "y" || answer == "yes";
+}
+
+void HandleTriangle()
+{
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("\nTo find triangle area, we use Heron's formula: A = Math.Sqrt(p(p−a)(p−b)(p−c)), where p = (a + b + c) / 2");
+    Console.WriteLine("Enter the sides of the triangle:");
 
     Console.Write("a = ");
     double a = Convert.ToDouble(Console.ReadLine());
@@ -53,68 +81,93 @@ void CalculateTriangleArea()
     double b = Convert.ToDouble(Console.ReadLine());
     Console.Write("c = ");
     double c = Convert.ToDouble(Console.ReadLine());
+    Console.ResetColor();
 
-    double p = (a + b + c) / 2;
-
-    if (a + b <= c || a + c <= b || b + c <= a)
+    if (!IsValidTriangle(a, b, c))
     {
-        Console.WriteLine("There is no such triangle. The sum of the lengths of any two sides must be greater than the length of the third side.");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine();
+        Console.WriteLine("There is no such triangle. The sum of the lengths of any two sides must be greater than the length of the third side");
+        Console.ResetColor();
+        return;
+    }
 
-    }
-    else
-    {
-        double areaTriangle = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
-        Console.WriteLine($"\nTriangle area = {areaTriangle}");
-    }
-    
-    AskToContinue();
+    double areaTriangle = CalculateTriangleArea(a, b, c);
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"\nTriangle area = {areaTriangle}");
+    Console.ResetColor();
 }
 
-int CalculateRectangleArea()
+void HandRectangle()
 {
-    Console.WriteLine("\nTo find a rectangle's area, multiply its length by its width: Area = Length * Width");
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("\nFormula for Rectangle area: A = Length * Width");
     Console.WriteLine("Enter length and width of the rectangle.");
 
     Console.Write("Length = ");
-    int length = Convert.ToInt32(Console.ReadLine());
+    double length = Convert.ToDouble(Console.ReadLine());
     Console.Write("Width = ");
-    int width = Convert.ToInt32(Console.ReadLine());
+    double width = Convert.ToDouble(Console.ReadLine());
+    Console.ResetColor();
 
-    return length * width;
+    double areaRectangle = CalculateRectangleArea(length, width);
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"\nRectangle area = {areaRectangle}");
+    Console.ResetColor();
 }
 
-double CalculateSquareArea()
+void HandleSquare()
 {
-    Console.WriteLine("\nTo count the area of a square, use the formula A = side * side");
-    Console.Write("Enter side of the square: ");
-    int side = Convert.ToInt32(Console.ReadLine());
+    Console.ForegroundColor = ConsoleColor.Yellow;
 
-    return Math.Pow(side, 2);
+    Console.WriteLine("\nFormula for Square area: A = side * side");
+
+    Console.Write("Enter side of the square: side = ");
+    double side = Convert.ToDouble(Console.ReadLine());
+    Console.ResetColor();
+
+    double areaSquare = CalculateSquareArea(side);
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"\nSquare area = {areaSquare}");
+    Console.ResetColor();
+
 }
 
-double CalculateCircleArea()
+void HandleCircle()
 {
-    Console.WriteLine("To count a circle's area, use the formula A = πr²");
-    Console.Write("Enter radius of the circle: ");
-    double r = Convert.ToInt32(Console.ReadLine());
+    Console.ForegroundColor = ConsoleColor.Yellow;
 
-    return Math.PI * Math.Pow(r, 2);
+    Console.WriteLine("\nFormula for Circle area: A = πr²");
+
+    Console.Write("Enter radius of the circle: r = ");
+    double radius = Convert.ToDouble(Console.ReadLine());
+    Console.ResetColor();
+
+    double areaCircle = CalculateCircleArea(radius);
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"\nCircle area = {areaCircle}");
+    Console.ResetColor();
+
 }
 
-void AskToContinue()
+bool IsValidTriangle(double sideA, double sideB, double sideC)
 {
-    Console.Write("\nDo you want to continue(Yes/No, y/n): ");
-
-    string answer = Console.ReadLine();
-
-    if (answer == "Yes" || answer == "yes" || answer == "Y" || answer == "y")
-    {
-        isRepeat = true;
-    }
-    else
-    {
-        isRepeat = false;
-    }
-
-    Console.Clear();
+    return sideA + sideB > sideC && sideA + sideC > sideB && sideB + sideC > sideA;
 }
+
+double CalculateTriangleArea(double a, double b, double c)
+{
+    double p = (a + b + c) / 2;
+
+    return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+}
+
+double CalculateRectangleArea(double length, double width) => length * width;
+
+double CalculateSquareArea(double side) => side * side;
+
+double CalculateCircleArea(double radius) => Math.PI * radius * radius;
